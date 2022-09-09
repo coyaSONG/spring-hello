@@ -1,0 +1,21 @@
+스프링 빈을 등록하는 방법 (2가지) 정리
+
+1. 컴포넌트 스캔을 통한 방법
+
+    1) 스프링 컨테이너가 동작할때 컴포넌트 스캔이 진행됨.
+    2) @Component 어노테이션이 적용 된 클래스를 찾아서 스프링 빈에 등록됨(Controller, Service, Repository)
+    3) @Autowired 어노테이션을 찾아서 의존성 주입(DI) 실행 됨.
+    4) MemberController에 MemberService가 Autowired로 되어있으므로 컨테이너에 빈으로 올라가있는 MemberService에 의존성 주입
+    5) MemberService에 Repository부분이 Autowired이므로 컨테이너에 빈으로 올라간 Repository 주입
+    ** 생성장 주입의 경우에는 생성 되는 과정중에 의존관계가 발생하게 됨.
+
+2. SpringConfig를 이용하여 자바코드로 직접 설정
+
+    1) 마찬가지로 스프링 컨테이너 동작이 컴포넌트 스캔 수행. @Configuration 어노테이션에 @Component가 포함되어있음
+    2) SpringConfig의 MemberService, MemberRepository가 @Bean 어노테이션을 통해 빈으로 등록됨
+    3) MemberService에 return new MemberService(memberRepository()); 부분에서 MemberService 와 MemberRepository는 의존성 주입이 된 상태
+    4) MemberController의 등록은 Autowired를 통해 memberService를 등록해야함.
+    5) 컨테이너에 MemberService가 빈으로 이미 등록(3번과정)되어 있으므로 그걸 컨트롤러와 등록
+    ** MemberController의 경우 MemberService가 빈으로 등록되어 있어도 @Autowired는 필요함
+    (스프링 부트의 경우 생성자 주입에 대하여 편의를 위해 @Autowired를 생략할수있는 기능이 구현되어 있음.)
+    스프링이 @Autowired를 보고 의존관계를 자동 주입(컨테이너에서 의존관계에 해당하는 빈을 찾아서 주입)

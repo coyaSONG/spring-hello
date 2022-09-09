@@ -20,6 +20,9 @@ public class SpringConfig {
 
     @Bean
     public MemberRepository memberRepository() {
+        //현재 이 연습 프로젝트는 초기에 DB가 정해지지 않은 상태에서
+        //인터페이스 구현체로 임시 운용하다가 DB를 이후에 정해지는 시나리오로 진행중
+
         return new MemoryMemberRepository();
     }
 }
