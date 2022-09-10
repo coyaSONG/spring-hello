@@ -1,8 +1,11 @@
 package coya.hellospring.controller;
 
+import coya.hellospring.domain.Member;
 import coya.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 //spring의 정형화된 형태
 //1. Controller : 컨트롤러를 통해서 외부 요청을 받고
@@ -17,8 +20,6 @@ public class MemberController {
     // -> 멤버서비스같은 정보를 가진 서비스는 컨테이너 상 한번만 생성해서 다같이 써도 무관하기 때문
     private MemberService memberService;
 
-
-
     //Autowired를 써주면 스프링이 컨테이너 생성할때 생성된 서비스를 자동으로 연결해줌
     // Dependency injection 3가지
     // 1. 생성자 주입 : 생성자를 통해서 멤버서비스가 멤버 컨트롤러에 주입이 됨. 추천
@@ -31,12 +32,24 @@ public class MemberController {
     // 2. 필드 주입 : 스프링 뜰때 외엔 중간에 바꿀수있는 방법이 없어서 별로 안씀.
     //    @Autowired private MemberService memberService;
 
-
     // 3. setter 주입 : 퍼블릭으로 노출이 되어버림.
     //    @Autowired
     //    public void setMemberService(MemberService memberService) {
     //        this.memberService = memberService;
     //    }
 
+    @GetMapping("/members/new")
+    public String createForm() {
+        return "members/createMemberForm";
+    }
 
+    @PostMapping("/members/new")
+    public String create(MemberForm form) {
+        Member member = new Member();
+        member.setName(form.getName());
+
+        memberService.join(member);
+
+        return "redirect:/";
+    }
 }
